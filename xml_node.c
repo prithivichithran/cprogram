@@ -1,16 +1,6 @@
 #include <xml_node.h>
 
-static ID decorate, decorate_bang;
 
-#ifdef DEBUG
-static void debug_node_dealloc(xmlNodePtr x)
-{
-  NOKOGIRI_DEBUG_START(x)
-  NOKOGIRI_DEBUG_END(x)
-}
-#else
-#  define debug_node_dealloc 0
-#endif
 
 static void mark(xmlNodePtr node)
 {
@@ -1653,11 +1643,8 @@ void init_xml_node()
   rb_define_method(klass, "create_internal_subset", create_internal_subset, 3);
   rb_define_method(klass, "create_external_subset", create_external_subset, 3);
   rb_define_method(klass, "pointer_id", pointer_id, 0);
-  rb_define_method(klass, "line", line, 0);
-  rb_define_method(klass, "content", get_native_content, 0);
-  rb_define_method(klass, "native_content=", set_native_content, 1);
-  rb_define_method(klass, "lang", get_lang, 0);
-  rb_define_method(klass, "lang=", set_lang, 1);
+
+  
 
   rb_define_private_method(klass, "process_xincludes", process_xincludes, 1);
   rb_define_private_method(klass, "in_context", in_context, 2);
