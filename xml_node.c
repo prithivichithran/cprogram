@@ -4,35 +4,6 @@
 
 static void mark(xmlNodePtr node)
 {
-  xmlDocPtr doc = node->doc;
-  if(doc->type == XML_DOCUMENT_NODE || doc->type == XML_HTML_DOCUMENT_NODE) {
-    if(DOC_RUBY_OBJECT_TEST(doc)) {
-      rb_gc_mark(DOC_RUBY_OBJECT(doc));
-    }
-  } else if(node->doc->_private) {
-    rb_gc_mark((VALUE)doc->_private);
-  }
-}
-
-/* :nodoc: */
-typedef xmlNodePtr (*pivot_reparentee_func)(xmlNodePtr, xmlNodePtr);
-
-/* :nodoc: */
-static void relink_namespace(xmlNodePtr reparented)
-{
-  xmlChar *name, *prefix;
-  xmlNodePtr child;
-  xmlNsPtr ns;
-
-  if (reparented->type != XML_ATTRIBUTE_NODE &&
-      reparented->type != XML_ELEMENT_NODE) { return; }
-
-  if (reparented->ns == NULL || reparented->ns->prefix == NULL) {
-    name = xmlSplitQName2(reparented->name, &prefix);
-
-    if(reparented->type == XML_ATTRIBUTE_NODE) {
-      if (prefix == NULL || strcmp((char*)prefix, XMLNS_PREFIX) == 0) { return; }
-    }
 
     ns = xmlSearchNs(reparented->doc, reparented, prefix);
 
